@@ -187,10 +187,10 @@ TRADUCTIONS = {
         "sous_titre": "Pavés écologiques recyclés — zéro résidu, haute performance",
         "nav": ["🏠 Accueil", "🧮 Calculateur & Devis", "📸 Galerie", "📞 Contact", "📋 Mon Historique", "⭐ Témoignages", "🔐 Admin"],
         "que_faire": "Que souhaitez-vous faire ?",
-        "nos_engagements":"nos_engagements, Notre concept, nos valeurs, nos engagements",
-        "simulez": "simulez, Simulez, personnalisez et commandez",
-        "inspirez":"inspirez, Inspirez-vous de nos réalisations",
-        "repond": "repond, On vous répond sous 24h",
+        "nos_engagements": T.get("nos_engagements", "Notre concept, nos valeurs, nos engagements"),
+        "simulez": T.get("simulez", "Simulez, personnalisez et commandez"),
+        "inspirez": T.get("inspirez", "Inspirez-vous de nos réalisations"),
+        "repond": T.get("repond", "On vous répond sous 24h"),
         "decouvrir_info": "**ST-Ecoparvis** transforme les déchets plastiques en pavés écologiques.\n\n✅ Zéro résidu · ✅ Haute résistance · ✅ Éco-drainant · ✅ Made in Bénin",
         "aller_calc": "👈 Allez dans **Calculateur & Devis** dans le menu de gauche.",
         "aller_gal": "👈 Allez dans **Galerie** dans le menu de gauche.",
@@ -602,6 +602,8 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
 * { font-family: 'Poppins', sans-serif; }
 /* Mode sombre - forcer couleurs texte */
+.stMarkdown p { color: inherit !important; }
+h1, h2, h3, h4, h5, h6 { color: #1B5E20 !important; }
 .stApp { color: #1a1a1a !important; }
 [data-theme="dark"] .card, [data-theme="dark"] .contact-card,
 [data-theme="dark"] .historique-card, [data-theme="dark"] .temoignage-card,
@@ -774,26 +776,18 @@ if menu == T["nav"][0]:
     # Chiffres clés
     st.markdown(f"<h3 style='text-align:center;color:#1B5E20;'>{T['chiffres']}</h3>", unsafe_allow_html=True)
     s1, s2, s3, s4 = st.columns(4)
+    stat1_label = T.get("plastique_recycle", "♻️ Plastique recyclé par m²")
+    stat2_label = T.get("resistance_meca", "💪 Résistance mécanique")
+    stat3_label = T.get("zones_livraison", "🚚 Livraison au Bénin")
+    stat4_label = T.get("interface_multi", "🌍 Interface multilingue")
     with s1:
-        st.markdown("""<div class="stat-card">
-            <div class="stat-number">12-18 kg</div>
-            <div class="stat-label">{T.get("plastique_recycle", "♻️ Plastique recyclé par m²")}</div>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(f'<div class="stat-card"><div class="stat-number">12-18 kg</div><div class="stat-label">{stat1_label}</div></div>', unsafe_allow_html=True)
     with s2:
-        st.markdown("""<div class="stat-card">
-            <div class="stat-number">30-55 MPa</div>
-            <div class="stat-label">{T.get("resistance_meca", "💪 Résistance mécanique")}</div>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(f'<div class="stat-card"><div class="stat-number">30-55 MPa</div><div class="stat-label">{stat2_label}</div></div>', unsafe_allow_html=True)
     with s3:
-        st.markdown("""<div class="stat-card">
-            <div class="stat-number">5 zones</div>
-            <div class="stat-label">{T.get("zones_livraison", "🚚 Livraison au Bénin")}</div>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(f'<div class="stat-card"><div class="stat-number">5 zones</div><div class="stat-label">{stat3_label}</div></div>', unsafe_allow_html=True)
     with s4:
-        st.markdown("""<div class="stat-card">
-            <div class="stat-number">5 langues</div>
-            <div class="stat-label">{T.get("interface_multi", "🌍 Interface multilingue")}</div>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(f'<div class="stat-card"><div class="stat-number">5 langues</div><div class="stat-label">{stat4_label}</div></div>', unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — CALCULATEUR & DEVIS
@@ -876,6 +870,14 @@ elif menu == T["nav"][1]:
             motif_choisi = "Motif personnalisé"
             supplement_motif = 1000
             st.markdown(f'<div class="color-notice">{T["motif_perso_info"]}</div>', unsafe_allow_html=True)
+            photo_motif = st.file_uploader(
+                "📸 Téléchargez votre photo de motif (optionnel)",
+                type=["jpg", "jpeg", "png", "webp"],
+                key="photo_motif"
+            )
+            if photo_motif:
+                st.image(photo_motif, caption="Votre motif personnalisé", width=200)
+                st.success("✅ Photo reçue ! Elle sera jointe à votre commande WhatsApp.")
 
         # Couleur
         st.markdown(f"#### {T['couleur_titre']}")
@@ -990,14 +992,14 @@ elif menu == T["nav"][1]:
     st.markdown("---")
     col_m1, col_m2 = st.columns(2)
     with col_m1:
-        st.markdown(f"### {T['montant_label']} : **{montant_total:,.0f} FCFA**")
-        st.caption(f"Pavés: {montant_paves:,.0f} | Transport: {frais_livraison:,.0f} FCFA")
-        st.markdown(f'<div style="color:#2E7D32;font-weight:bold;">⏱️ {T["validite"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="color:#ffffff;background:linear-gradient(135deg,#1B5E20,#2E7D32);padding:16px;border-radius:12px;margin-bottom:8px;"><span style="font-size:20px;font-weight:900;">{T["montant_label"]} : {montant_total:,.0f} FCFA</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="color:#4CAF50;font-size:12px;">Pavés: {montant_paves:,.0f} FCFA | Transport: {frais_livraison:,.0f} FCFA</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="color:#4CAF50;font-weight:bold;margin-top:6px;">⏱️ {T["validite"]}</div>', unsafe_allow_html=True)
     with col_m2:
         if economie > 0:
-            st.markdown(f"### {T['economie_label']} : **{economie:,.0f} FCFA** 🎉")
+            st.markdown(f'<div style="color:#ffffff;background:linear-gradient(135deg,#2E7D32,#4CAF50);padding:16px;border-radius:12px;"><span style="font-size:18px;font-weight:900;">{T["economie_label"]} : {economie:,.0f} FCFA 🎉</span></div>', unsafe_allow_html=True)
         else:
-            st.markdown(f"### {T['economie_label']} : Prix compétitif vs béton")
+            st.markdown(f'<div style="color:#ffffff;background:linear-gradient(135deg,#2E7D32,#4CAF50);padding:16px;border-radius:12px;"><span style="font-size:16px;font-weight:700;">{T["economie_label"]} : Prix compétitif ✅</span></div>', unsafe_allow_html=True)
 
     st.session_state.etape = max(st.session_state.etape, 2)
 
